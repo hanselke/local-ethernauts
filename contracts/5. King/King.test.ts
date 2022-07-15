@@ -22,7 +22,15 @@ describe("Attacking King", function () {
 
   // Get this to pass!
   it("Succesfully become and remain the king forever", async () => {
+    let prize = await victim._prize();
+    let balance = await ethers.provider.getBalance(victim.address);
+    let contractBalance =  await ethers.provider.getBalance(attacker.address);
+    console.log("before hackcontract",prize.toString(),balance.toString(),contractBalance.toString())
+
     await attacker.hackContract({ gasLimit: 30000000 });
+    balance = await ethers.provider.getBalance(victim.address);
+    prize = await victim._prize();
+    console.log("after hackcontract",prize.toString(),balance,contractBalance.toString())
     try {
       await kingPlayer.sendTransaction({
         value: ethers.utils.parseEther("100"),
